@@ -1,0 +1,160 @@
+/* Reset */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Overall page with a full‐page background image */
+body {
+  font-family: Arial, sans-serif;
+  background: url("https://habaridoc.com/_next/image?url=%2Fabout.PNG&w=1920&q=75") no-repeat center center fixed;
+  background-size: cover;
+  color: #000; /* All letters set to black */
+  padding: 20px;
+}
+
+/* Container with a semi‑transparent white background, accented with a light black (dark grey) border */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 30px;
+  border: 2px solid #333; /* Light black accent */
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Logo styling: centered and scaled */
+.logo {
+  display: block;
+  margin: 0 auto 15px auto;
+  width: 100px;
+  height: auto;
+}
+
+/* Title styling: black text with a matching black underline */
+.title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  text-align: center;
+  color: #000;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 3px solid #000;
+}
+
+/* Form styling */
+form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+form .form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+form .form-group label {
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #000;
+}
+
+form .form-group input,
+form .form-group select,
+form .form-group textarea {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  color: #000;
+  background: #fff;
+}
+
+form .form-group textarea {
+  resize: vertical;
+}
+
+form .full-width {
+  grid-column: span 2;
+}
+
+/* Button styling using a light black (light gray) theme */
+button {
+  padding: 10px 15px;
+  background: #ccc;  /* Light gray as "light black" */
+  border: none;
+  color: #000;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  outline: none;
+}
+
+button:hover {
+  background: #bbb; /* Slightly darker on hover */
+  transform: scale(1.03);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+/* Table container for overflow handling */
+.table-container {
+  overflow-x: auto;
+}
+
+/* Table styling with light black accents */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+table thead {
+  background: #ccc;  /* Light gray header */
+  color: #000;
+}
+
+table th,
+table td {
+  padding: 10px;
+  border: 1px solid #333;  /* Light black border */
+  text-align: center;
+  font-size: 0.9rem;
+  color: #000;
+}
+
+table tr:nth-child(even) {
+  background: #eee;  /* Light gray for alternate rows */
+}
+
+/* Table title styling */
+.table-title {
+  font-size: 1.75rem;
+  margin-bottom: 10px;
+  text-align: center;
+  color: #000;
+}
+
+/* Export buttons container */
+.export-buttons {
+  margin-top: 20px;
+  text-align: center;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  form {
+    grid-template-columns: 1fr;
+  }
+  
+  .full-width {
+    grid-column: span 1;
+  }
+}
