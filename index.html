@@ -2,23 +2,31 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Habari Call Center Registry</title>
-  <link rel="icon" href="https://play-lh.googleusercontent.com/2Yg_EcEcjUcXghSoEMH16h5Qfg54kcdmIdzmOp-cIKyPP9WIseHzNud2r681OvX3rQ=w240-h480-rw" type="image/png">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=1.0.5">
+  <!-- Include jsPDF and html2canvas for PDF export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <!-- Include html-docx-js and FileSaver.js for Word export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html-docx-js/0.4.1/html-docx.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+  <script src="script.js?v=1.0.5"></script>
+  <!-- Prevent caching -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
 </head>
 <body>
   <div class="container">
-    <!-- Logo image at the top -->
-    <img class="logo" src="https://play-lh.googleusercontent.com/2Yg_EcEcjUcXghSoEMH16h5Qfg54kcdmIdzmOp-cIKyPP9WIseHzNud2r681OvX3rQ=w240-h480-rw" alt="HabariDOC Logo">
-    
+    <!-- Logo -->
+    <img src="https://play-lh.googleusercontent.com/2Yg_EcEcjUcXghSoEMH16h5Qfg54kcdmIdzmOp-cIKyPP9WIseHzNud2r681OvX3rQ=w240-h480-rw" class="logo" alt="HabariDOC Logo">
     <h1 class="title">Habari Call Center Registry</h1>
     
-    <form id="callForm">
-      <!-- Phone, Date and Time -->
+    <!-- Call Log Form -->
+    <form id="callLogForm">
       <div class="form-group">
-        <label for="phone">Phone Number</label>
-        <input type="tel" id="phone" placeholder="e.g., 123-456-7890" required>
+        <label for="phoneNumber">Phone Number</label>
+        <input type="tel" id="phoneNumber" required>
       </div>
       <div class="form-group">
         <label for="date">Date</label>
@@ -28,40 +36,34 @@
         <label for="time">Time</label>
         <input type="time" id="time" required>
       </div>
-      
-      <!-- Caller and Demographics -->
       <div class="form-group">
-        <label for="callerName">Caller/Patient Name</label>
-        <input type="text" id="callerName" placeholder="Full name" required>
+        <label for="callerName">Caller Name</label>
+        <input type="text" id="callerName" required>
       </div>
       <div class="form-group">
         <label for="age">Age</label>
-        <input type="number" id="age" min="0" required>
+        <input type="number" id="age" required>
       </div>
       <div class="form-group">
         <label for="sex">Sex</label>
         <select id="sex" required>
           <option value="">Select Sex</option>
-          <option value="M">Male</option>
-          <option value="F">Female</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
           <option value="Other">Other</option>
         </select>
       </div>
-      
-      <!-- Location and Representative -->
       <div class="form-group">
         <label for="location">Location</label>
-        <input type="text" id="location" placeholder="City/Region" required>
+        <input type="text" id="location" required>
       </div>
       <div class="form-group">
-        <label for="repName">Representative Name (if any)</label>
-        <input type="text" id="repName" placeholder="If applicable">
+        <label for="representative">Representative Name (if any)</label>
+        <input type="text" id="representative">
       </div>
-      
-      <!-- Service Provided -->
-      <div class="form-group full-width">
+      <div class="form-group">
         <label for="serviceProvided">Service Provided</label>
-        <select id="serviceProvided" required>
+        <select id="serviceProvided">
           <option value="">Select Service</option>
           <option value="Consultation">Consultation</option>
           <option value="Follow-Up">Follow-Up</option>
@@ -70,77 +72,79 @@
         </select>
         <input type="text" id="serviceOther" placeholder="Please specify" style="display:none; margin-top: 8px;">
       </div>
-      
-      <!-- Referral -->
-      <div class="form-group full-width">
-        <label>Referral Made?</label>
-        <label><input type="radio" name="referralMade" value="Yes" required> Yes</label>
-        <label style="margin-left:15px;"><input type="radio" name="referralMade" value="No" required> No</label>
+      <div class="form-group">
+        <label for="referral">Referral Made</label>
+        <select id="referral">
+          <option value="">Select</option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </select>
       </div>
-      <div class="form-group full-width" id="referralSiteDiv" style="display:none;">
+      <div class="form-group" id="referralSiteGroup">
         <label for="referralSite">Referral Site</label>
-        <input type="text" id="referralSite" placeholder="Enter referral site">
-      </div>
-      
-      <!-- Consultant, Duration and Summary -->
-      <div class="form-group">
-        <label for="consultant">Consultant Physician Name</label>
-        <input type="text" id="consultant" placeholder="Physician name" required>
+        <input type="text" id="referralSite">
       </div>
       <div class="form-group">
-        <label for="duration">Call Duration (minutes)</label>
-        <input type="number" id="duration" min="0" placeholder="Duration">
+        <label for="consultant">Consultant Physician</label>
+        <input type="text" id="consultant">
       </div>
       <div class="form-group full-width">
         <label for="summary">Call Summary/Outcome</label>
-        <textarea id="summary" rows="3" placeholder="Brief summary" required></textarea>
+        <textarea id="summary" rows="3" required></textarea>
       </div>
-      
-      <div class="form-group full-width" style="text-align:center;">
+      <!-- New Field: Call Center Agent Name (placed below summary) -->
+      <div class="form-group full-width">
+        <label for="agentName">Call Center Agent Name</label>
+        <input type="text" id="agentName" required>
+      </div>
+      <!-- New Field: Call Modality (placed below agent name) -->
+      <div class="form-group full-width">
+        <label for="callModality">Call Modality</label>
+        <input type="text" id="callModality" required>
+      </div>
+      <div class="form-group full-width" style="text-align: center;">
         <button type="submit">Add Entry</button>
       </div>
     </form>
     
-    <!-- Table of entries -->
-    <h2 class="table-title">Entries</h2>
+    <!-- Export Options -->
+    <div class="export-buttons">
+      <button type="button" onclick="exportToExcel()">Export to Excel</button>
+      <button type="button" onclick="exportToPDF()">Export to PDF</button>
+      <button type="button" onclick="exportToWord()">Export to Word</button>
+    </div>
+    
+    <!-- Call Log Table -->
+    <h2 class="table-title">Call Log Entries</h2>
     <div class="table-container">
-      <table id="entriesTable">
+      <table id="callLogTable">
         <thead>
           <tr>
-            <th>ID</th>
             <th>Phone</th>
             <th>Date</th>
             <th>Time</th>
-            <th>Caller Name</th>
+            <th>Caller</th>
             <th>Age</th>
             <th>Sex</th>
             <th>Location</th>
-            <th>Rep Name</th>
-            <th>Service Provided</th>
-            <th>Referral Made</th>
+            <th>Representative</th>
+            <th>Service</th>
+            <th>Referral</th>
             <th>Referral Site</th>
             <th>Consultant</th>
-            <th>Duration</th>
             <th>Summary</th>
+            <th>Agent Name</th>
+            <th>Call Modality</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          <!-- Entries will be added here dynamically -->
+          <!-- Entries appended here dynamically -->
         </tbody>
       </table>
-    </div>
-    
-    <!-- Export buttons -->
-    <div class="export-buttons">
-      <button id="exportExcel">Export to Excel</button>
-      <button id="exportPDF">Export to PDF</button>
     </div>
   </div>
   
   <script src="script.js"></script>
-  <!-- Include jsPDF and html2canvas libraries from CDN -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </body>
 </html>
